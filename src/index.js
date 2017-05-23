@@ -4,13 +4,14 @@ import five from 'johnny-five';
 import chipio from 'chip-io';
 /* eslint-enable */
 import { logger } from './config';
-import * as keys from './keys';
+import * as auth from './keys';
 
 logger.debug('initializing firebase app');
-firebase.initializeApp(keys.config);
+firebase.initializeApp(auth.firebaseConfig);
 
 const garageDoorsRef = firebase.database().ref('/garage/doors');
-// const garageRef = firebase.database().ref('/garage/');
+
+// init redux store
 
 // init wakelight
 const board = new five.Board({
@@ -19,7 +20,7 @@ const board = new five.Board({
 board.on('ready', () => {
   // connect to firebase with email/password auth
   firebase.auth()
-  .signInWithEmailAndPassword(keys.email, keys.password)
+  .signInWithEmailAndPassword(auth.email, auth.password)
   .then((user) => {
     logger.debug(`${user.email} signed in`);
 
